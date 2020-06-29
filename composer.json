@@ -1,0 +1,23 @@
+{
+	"name": "helper functions",
+	"description": "helper functions",
+	"version": "1.0.0",
+	"type": "library",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Exinfinite Chen",
+			"email": "chen.min.home@gmail.com",
+			"role": "Developer"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"Exinfinite\\Helpers\\": "src/"
+		}
+	},
+	"require": {
+		"php": ">=5.6",
+		"tightenco/collect": ">=5.4"
+	}
+}
