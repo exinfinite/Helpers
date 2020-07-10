@@ -1,7 +1,7 @@
 {
 	"name": "exinfinite/helpers",
 	"description": "helper functions",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"type": "library",
 	"license": "MIT",
 	"authors": [
@@ -11,6 +11,13 @@
 			"role": "Developer"
 		}
 	],
+	"config": {
+		"process-timeout": 1800,
+		"vendor-dir": "vendors",
+		"optimize-autoloader": true,
+		"sort-packages": true
+	},
+	"minimum-stability": "stable",
 	"autoload": {
 		"psr-4": {
 			"Exinfinite\\Helpers\\": "src/"
@@ -23,6 +30,7 @@
 		"php": ">=5.6",
 		"tightenco/collect": "^5.4",
 		"ramsey/uuid": "^3.9",
-		"monolog/monolog": "^1.20"
+		"monolog/monolog": "^1.20",
+		"phpmailer/phpmailer": "^6.1"
 	}
 }
