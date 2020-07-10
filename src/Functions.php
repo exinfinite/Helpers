@@ -1,5 +1,5 @@
 <?php
-namespace Exinfinite\Helpers;
+//namespace Exinfinite\Helpers;
 if (!function_exists(__NAMESPACE__ . '\randStr')) {
     function randStr($len = 16) {
         $seeds = str_split('ABCDEFGHJKLMNPQRSTUVWXYZ23456789');
@@ -17,7 +17,7 @@ if (!function_exists(__NAMESPACE__ . '\sanitizeStr')) {
         return is_string($input) ? filter_var($input, FILTER_SANITIZE_STRING) : false;
     }
 }
-if (!function_exists(__NAMESPACE__ . '\uuid')) {
+//if (!function_exists(__NAMESPACE__ . '\uuid')) {
     function uuid() {
         mt_srand((double) microtime() * 10000);
         $charid = strtoupper(md5(uniqid(rand(), true)));
@@ -29,7 +29,7 @@ if (!function_exists(__NAMESPACE__ . '\uuid')) {
             substr($charid, 20, 12),
         ]);
     }
-}
+//}
 if (!function_exists(__NAMESPACE__ . '\captcha')) {
     function captcha($session_name = "verification", $txt = 4, $line = 5, $pixel = 150) {
         unset($_SESSION[$session_name]);
