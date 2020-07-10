@@ -14,7 +14,10 @@
 	"autoload": {
 		"psr-4": {
 			"Exinfinite\\Helpers\\": "src/"
-		}
+		},
+		"files": [
+			"src/Functions.php"
+		]
 	},
 	"require": {
 		"php": ">=5.6",
