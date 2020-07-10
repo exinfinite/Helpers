@@ -1,7 +1,7 @@
 {
 	"name": "exinfinite/helpers",
 	"description": "helper functions",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"type": "library",
 	"license": "MIT",
 	"authors": [
