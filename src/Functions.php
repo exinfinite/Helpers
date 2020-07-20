@@ -309,6 +309,11 @@ if (!function_exists(__NAMESPACE__ . '\validEmail')) {
         return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 }
+if (!function_exists(__NAMESPACE__ . '\random')) {
+    function random(array $items) {
+        return collect($items)->random();
+    }
+}
 if (!function_exists(__NAMESPACE__ . '\inApp')) {
     function inApp() {
         return !collect(['Line', 'FBAV', 'micromessenger'])->every(function ($item) {
