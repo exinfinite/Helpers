@@ -90,13 +90,14 @@ if (!function_exists(__NAMESPACE__ . '\plainText')) {
 if (!function_exists(__NAMESPACE__ . '\splitWords')) {
     function splitWords($input, $sp = '&sp;') {
         return is_string($input) ? explode($sp, $input) : [];
-        /* return explode(
-    $sp,
-    preg_replace(
-    '/[^\x{4e00}-\x{9fa5}A-Za-z0-9@\.]+/u', $sp,
-    strip_tags($input)
-    )
-    ); */
+    }
+}
+if (!function_exists(__NAMESPACE__ . '\searchWords')) {
+    function searchWords($input, $keywordsAmt = 3, $sp = ' ') {
+        $keywords = splitWords($input, $sp);
+        return collect($keywords)->filter(function ($v) {
+            return trim($v) != '';
+        })->take($keywordsAmt)->toArray();
     }
 }
 if (!function_exists(__NAMESPACE__ . '\stripDomain')) {
