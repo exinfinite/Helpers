@@ -298,11 +298,13 @@ if (!function_exists(__NAMESPACE__ . '\joinPath')) {
     }
 }
 if (!function_exists(__NAMESPACE__ . '\buildUrl')) {
-    function buildUrl(array $pieces) {
+    function buildUrl(array $pieces, array $params = []) {
         $glue = '/';
         $first = rtrim(array_shift($pieces), $glue);
         $rest = joinPath($pieces, $glue, $glue);
-        return joinPath([$first, $rest], $glue, !startsWith($first, $glue) ? $glue : false);
+        $url = joinPath([$first, $rest], $glue, !startsWith($first, $glue) ? $glue : false);
+        $queryStr = http_build_query($params);
+        return $queryStr == '' ? $url : joinPath([$url, $queryStr], '?');
     }
 }
 if (!function_exists(__NAMESPACE__ . '\validEmail')) {
