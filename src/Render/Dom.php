@@ -39,19 +39,20 @@ class Dom extends \DOMDocument {
     function domByTagName($tag) {
         return $this->getElementsByTagName($tag);
     }
-    function toLazy($nodes, $placeHolder = '', $base_url = '') {
+    function toLazy($nodes, $placeHolder = null, $base_url = '') {
         $lazyClass = 'lazy';
         foreach ($nodes as $node) {
-            /* if (!in_array($lazyClass, explode(' ', $node->getAttribute('class')))) {
-            continue;
-            } */
             $newClass = array_unique(array_merge(explode(' ', $node->getAttribute('class')), [$lazyClass]));
             $oldsrc = $node->getAttribute('src');
             if (!startsWith($oldsrc, '//') && startsWith($oldsrc, '/')) {
                 $oldsrc = buildUrl([$base_url, $oldsrc]);
             }
             $node->setAttribute("data-src", $oldsrc);
-            $node->setAttribute("src", $placeHolder);
+            if (is_null($placeHolder)) {
+                $node->removeAttributeNode($node->attributes->getNamedItem('src'));
+            } else {
+                $node->setAttribute("src", $placeHolder);
+            }
             $node->setAttribute("class", implode(' ', $newClass));
         }
     }
