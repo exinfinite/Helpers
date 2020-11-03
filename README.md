@@ -1,5 +1,8 @@
+[![Latest Stable Version](https://poser.pugx.org/exinfinite/helpers/v)](//packagist.org/packages/exinfinite/helpers)
+[![Total Downloads](https://poser.pugx.org/exinfinite/helpers/downloads)](//packagist.org/packages/exinfinite/helpers)
+[![License](https://poser.pugx.org/exinfinite/helpers/license?1.1.0)](//packagist.org/packages/exinfinite/helpers)
+
 # 安裝
-add .git url to repositories in the composer.json
 ```php
 composer require exinfinite/helpers
 ```

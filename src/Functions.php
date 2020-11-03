@@ -324,3 +324,15 @@ if (!function_exists(__NAMESPACE__ . '\inApp')) {
         });
     }
 }
+if (!function_exists(__NAMESPACE__ . '\touchDir')) {
+    function touchDir($dir_path, $mask = 0755) {
+        if (!file_exists($dir_path) && !is_dir($dir_path)) {
+            mkdir($dir_path, $mask, true);
+        }
+    }
+}
+if (!function_exists(__NAMESPACE__ . '\validFilename')) {
+    function validFilename($str, $regex = "/^[a-zA-Z0-9-_]+$/") {
+        return preg_match($regex, $str);
+    }
+}
