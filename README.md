@@ -1,6 +1,8 @@
-[![Latest Stable Version](https://poser.pugx.org/exinfinite/helpers/v)](//packagist.org/packages/exinfinite/helpers)
-[![Total Downloads](https://poser.pugx.org/exinfinite/helpers/downloads)](//packagist.org/packages/exinfinite/helpers)
-[![License](https://poser.pugx.org/exinfinite/helpers/license?1.1.0)](//packagist.org/packages/exinfinite/helpers)
+![Packagist PHP Version Support](https://img.shields.io/packagist/php-v/exinfinite/helpers)
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/exinfinite/helpers)
+![Packagist Version](https://img.shields.io/packagist/v/exinfinite/helpers)
+![Packagist Downloads](https://img.shields.io/packagist/dt/exinfinite/helpers)
+![GitHub](https://img.shields.io/github/license/exinfinite/helpers)
 
 # 安裝
 ```php
