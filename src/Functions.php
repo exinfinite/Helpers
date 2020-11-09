@@ -336,3 +336,20 @@ if (!function_exists(__NAMESPACE__ . '\validFilename')) {
         return preg_match($regex, $str);
     }
 }
+if (!function_exists(__NAMESPACE__ . '\urlAddQuerys')) {
+    function urlAddQuerys($url, array $add_params = []) {
+        $secs = parse_url($url);
+        $scheme = isset($secs['scheme']) ? "{$secs['scheme']}://" : "";
+        $host = isset($secs['host']) ? $secs['host'] : "";
+        $path = isset($secs['path']) ? "{$secs['path']}" : "";
+        $query = call_user_func(function () use ($secs) {
+            $query = [];
+            if (array_key_exists('query', $secs)) {
+                parse_str($secs['query'], $query);
+            }
+            return $query;
+        });
+        $query_str = http_build_query(array_merge($query, $add_params));
+        return "{$scheme}{$host}{$path}?{$query_str}";
+    }
+}
