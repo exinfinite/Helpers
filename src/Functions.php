@@ -301,6 +301,9 @@ if (!function_exists(__NAMESPACE__ . '\buildUrl')) {
     function buildUrl(array $pieces, array $params = []) {
         $glue = '/';
         $first = rtrim(array_shift($pieces), $glue);
+        $pieces = array_filter($pieces, function ($sec) {
+            return is_string($sec) && trim($sec) != '';
+        });
         $rest = joinPath($pieces, $glue, $glue);
         $url = joinPath([$first, $rest], $glue, !startsWith($first, $glue) ? $glue : false);
         $queryStr = http_build_query($params);
