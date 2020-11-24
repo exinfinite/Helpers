@@ -301,6 +301,9 @@ if (!function_exists(__NAMESPACE__ . '\buildUrl')) {
     function buildUrl(array $pieces, array $params = []) {
         $glue = '/';
         $first = rtrim(array_shift($pieces), $glue);
+        $pieces = array_filter($pieces, function ($sec) {
+            return is_string($sec) && trim($sec) != '';
+        });
         $rest = joinPath($pieces, $glue, $glue);
         $url = joinPath([$first, $rest], $glue, !startsWith($first, $glue) ? $glue : false);
         $queryStr = http_build_query($params);
@@ -334,5 +337,22 @@ if (!function_exists(__NAMESPACE__ . '\touchDir')) {
 if (!function_exists(__NAMESPACE__ . '\validFilename')) {
     function validFilename($str, $regex = "/^[a-zA-Z0-9-_]+$/") {
         return preg_match($regex, $str);
+    }
+}
+if (!function_exists(__NAMESPACE__ . '\urlAddQuerys')) {
+    function urlAddQuerys($url, array $add_params = []) {
+        $secs = parse_url($url);
+        $scheme = isset($secs['scheme']) ? "{$secs['scheme']}://" : "";
+        $host = isset($secs['host']) ? $secs['host'] : "";
+        $path = isset($secs['path']) ? "{$secs['path']}" : "";
+        $query = call_user_func(function () use ($secs) {
+            $query = [];
+            if (array_key_exists('query', $secs)) {
+                parse_str($secs['query'], $query);
+            }
+            return $query;
+        });
+        $query_str = http_build_query(array_merge($query, $add_params));
+        return "{$scheme}{$host}{$path}?{$query_str}";
     }
 }
