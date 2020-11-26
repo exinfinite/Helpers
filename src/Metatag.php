@@ -9,29 +9,32 @@ class Metatag {
         'author' => '',
         'copyright' => '',
     ];
-    function __construct(Array $dft = []) {
+    public function __construct(Array $dft = []) {
         $this->setMetas(array_intersect_key($dft, $this->meta));
     }
-    function set($key, $val) {
+    public function set($key, $val, $allow_empty = true) {
         if (
             array_key_exists($key, $this->meta) &&
             is_string($val)
         ) {
+            if (!$allow_empty === true && trim($val) == '') {
+                return;
+            }
             $this->meta[$key] = $val;
         }
     }
-    function get($key) {
+    public function get($key) {
         return (
             is_string($key) &&
             array_key_exists($key, $this->meta)
         ) ? $this->meta[$key] : '';
     }
-    function setMetas(Array $datas) {
+    public function setMetas(Array $datas) {
         foreach ($datas as $k => $v) {
             $this->set($k, $v);
         }
     }
-    function all() {
+    public function all() {
         return $this->meta;
     }
 }
