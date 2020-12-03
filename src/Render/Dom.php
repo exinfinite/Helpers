@@ -56,5 +56,32 @@ class Dom extends \DOMDocument {
             $node->setAttribute("class", implode(' ', $newClass));
         }
     }
+    function imgAlt(\DOMNodeList $nodes, $posifix = null) {
+        $posifix = !is_null($posifix) && is_string($posifix) ? $posifix : '';
+        foreach ($nodes as $node) {
+            $alt = array_filter([$node->getAttribute('alt'), $posifix], function ($t) {
+                return trim($t) != '';
+            });
+            $node->setAttribute("alt", implode(' - ', $alt));
+        }
+    }
+    function setYtApi(\DOMNodeList $nodes) {
+        foreach ($nodes as $node) {
+            $url = $node->getAttribute('src');
+            if (strpos($url, 'youtube.com/embed') === false) {
+                continue;
+            }
+            $secs = parse_url($url);
+            $query = [];
+            if(array_key_exists('query', $secs)){
+                parse_str($secs['query'], $query);
+            }
+            $query = array_merge($query, ['enablejsapi' => '1']);
+            $query_str = http_build_query($query);
+            $scheme = isset($secs['scheme'])?"{$secs['scheme']}://":"//";
+            $path = isset($secs['path'])?"{$secs['path']}":"";
+            $node->setAttribute("src", "{$scheme}{$secs['host']}{$path}?{$query_str}");
+        }
+    }
 }
 ?>
