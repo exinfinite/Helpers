@@ -54,12 +54,7 @@ class Dom extends \DOMDocument {
     }
     function toLazy(\DOMNodeList $nodes, $placeHolder = null, $base_url = '') {
         $lazyClass = 'lazy';
-        $nodes = $this->nodelistNormal($nodes);
         foreach ($nodes as $node) {
-            $node->parentNode->insertBefore(
-                $this->noscript(parent::createElement('img'), $node, ['src', 'alt', 'width', 'height', 'class', 'id']),
-                $node
-            );
             $newClass = array_unique(array_merge(explode(' ', $node->getAttribute('class')), [$lazyClass]));
             $oldsrc = $node->getAttribute('src');
             if (!startsWith($oldsrc, '//') && startsWith($oldsrc, '/')) {
@@ -118,6 +113,15 @@ class Dom extends \DOMDocument {
         }
         $noscript->appendChild($append);
         return $noscript;
+    }
+    function addImgNoscript(\DOMNodeList $nodes) {
+        $nodes = $this->nodelistNormal($nodes);
+        foreach ($nodes as $node) {
+            $node->parentNode->insertBefore(
+                $this->noscript(parent::createElement('img'), $node, ['src', 'alt', 'width', 'height', 'class', 'id']),
+                $node
+            );
+        }
     }
 }
 ?>
