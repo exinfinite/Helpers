@@ -29,19 +29,37 @@ class Dom extends \DOMDocument {
                 'HTML-ENTITIES',
                 $this->encoding
             ),
-            LIBXML_COMPACT
+            LIBXML_COMPACT | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
         );
         return $this;
     }
     function saveHtml() {
         return parent::saveHtml();
     }
+    /**
+     * @param String $tag
+     * @return DOMNodeList
+     */
     function domByTagName($tag) {
         return $this->getElementsByTagName($tag);
     }
-    function toLazy($nodes, $placeHolder = null, $base_url = '') {
-        $lazyClass = 'lazy';
+    function imgAlt(\DOMNodeList $nodes, $posifix = null) {
+        $posifix = !is_null($posifix) && is_string($posifix) ? $posifix : '';
         foreach ($nodes as $node) {
+            $alt = array_filter([$node->getAttribute('alt'), $posifix], function ($t) {
+                return trim($t) != '';
+            });
+            $node->setAttribute("alt", implode(' - ', $alt));
+        }
+    }
+    function toLazy(\DOMNodeList $nodes, $placeHolder = null, $base_url = '') {
+        $lazyClass = 'lazy';
+        $nodes = $this->nodelistNormal($nodes);
+        foreach ($nodes as $node) {
+            $node->parentNode->insertBefore(
+                $this->noscript(parent::createElement('img'), $node, ['src', 'alt', 'width', 'height', 'class', 'id']),
+                $node
+            );
             $newClass = array_unique(array_merge(explode(' ', $node->getAttribute('class')), [$lazyClass]));
             $oldsrc = $node->getAttribute('src');
             if (!startsWith($oldsrc, '//') && startsWith($oldsrc, '/')) {
@@ -56,15 +74,6 @@ class Dom extends \DOMDocument {
             $node->setAttribute("class", implode(' ', $newClass));
         }
     }
-    function imgAlt(\DOMNodeList $nodes, $posifix = null) {
-        $posifix = !is_null($posifix) && is_string($posifix) ? $posifix : '';
-        foreach ($nodes as $node) {
-            $alt = array_filter([$node->getAttribute('alt'), $posifix], function ($t) {
-                return trim($t) != '';
-            });
-            $node->setAttribute("alt", implode(' - ', $alt));
-        }
-    }
     function setYtApi(\DOMNodeList $nodes) {
         foreach ($nodes as $node) {
             $url = $node->getAttribute('src');
@@ -73,15 +82,42 @@ class Dom extends \DOMDocument {
             }
             $secs = parse_url($url);
             $query = [];
-            if(array_key_exists('query', $secs)){
+            if (array_key_exists('query', $secs)) {
                 parse_str($secs['query'], $query);
             }
             $query = array_merge($query, ['enablejsapi' => '1']);
             $query_str = http_build_query($query);
-            $scheme = isset($secs['scheme'])?"{$secs['scheme']}://":"//";
-            $path = isset($secs['path'])?"{$secs['path']}":"";
+            $scheme = isset($secs['scheme']) ? "{$secs['scheme']}://" : "//";
+            $path = isset($secs['path']) ? "{$secs['path']}" : "";
             $node->setAttribute("src", "{$scheme}{$secs['host']}{$path}?{$query_str}");
         }
+    }
+    /**
+     * 將即時nodelist轉換為一般陣列,解決新增node時的timeout問題
+     *
+     * @param \DOMNodeList $nodes
+     * @return Array
+     */
+    private function nodelistNormal(\DOMNodeList $nodes) {
+        $normal = [];
+        foreach ($nodes as $node) {
+            $normal[] = $node;
+        }
+        return $normal;
+    }
+    /**
+     * @param \DOMElement $append
+     * @param \DOMElement $original
+     * @param Array $attrs
+     * @return \DOMElement
+     */
+    private function noscript(\DOMElement $append, \DOMElement $original, Array $attrs = []) {
+        $noscript = parent::createElement('noscript');
+        foreach ($attrs as $attr) {
+            $append->setAttribute($attr, $original->getAttribute($attr));
+        }
+        $noscript->appendChild($append);
+        return $noscript;
     }
 }
 ?>
