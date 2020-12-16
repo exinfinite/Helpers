@@ -29,7 +29,7 @@ class Dom extends \DOMDocument {
                 'HTML-ENTITIES',
                 $this->encoding
             ),
-            LIBXML_COMPACT | LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD
+            @LIBXML_COMPACT | @LIBXML_HTML_NOIMPLIED | @LIBXML_HTML_NODEFDTD
         );
         return $this;
     }
