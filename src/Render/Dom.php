@@ -7,8 +7,9 @@ class Dom extends \DOMDocument {
     function __construct($version = '1.0', $encoding = 'UTF-8') {
         parent::__construct($version, $encoding);
         $this->encoding = $encoding;
-        $this->tidy = new \tidy;
-        $this->parseRules = [
+    }
+    private function tidy($content, $encoding = 'utf8') {
+        $parseRules = [
             'clean' => TRUE,
             'doctype' => 'omit',
             'show-body-only' => true,
@@ -20,12 +21,13 @@ class Dom extends \DOMDocument {
             'new-empty-tags' => 'command embed keygen source track wbr',
             'new-inline-tags' => 'audio command datalist embed keygen mark menuitem meter output progress source time video wbr',
         ];
+        return tidy_parse_string($content, $parseRules, $encoding);
     }
     function loadHTML($content, $options = 0) {
         libxml_use_internal_errors(true);
         parent::loadHTML(
             @mb_convert_encoding(
-                tidy_parse_string($content, $this->parseRules, 'utf8'),
+                $this->tidy($content),
                 'HTML-ENTITIES',
                 $this->encoding
             ),
@@ -34,7 +36,7 @@ class Dom extends \DOMDocument {
         return $this;
     }
     function saveHtml() {
-        return parent::saveHtml();
+        return $this->tidy(parent::saveHtml());
     }
     /**
      * @param String $tag
